@@ -81,7 +81,10 @@ if gems.size > 0
     puts "  #{gem.full_name}: #{gem.full_gem_path}" if OPTIONS[:verbose]
     %Q{"#{gem.full_gem_path}"}
   end
-  cmd = "#{OPTIONS[:editor]} #{paths.join(' ')}"
+  cmds = paths.collect do |path|
+    "cd #{path} && #{OPTIONS[:editor]} #{path}"
+  end
+  cmd = cmds.join("&&")
   puts "Running `#{cmd}`" if OPTIONS[:verbose]
   exec cmd unless OPTIONS[:pretend]
 else
